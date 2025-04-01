@@ -93,15 +93,18 @@ for i=1:1000000
             maID = length((malesID)); %random ID for male
             male_rating = U(malesID(maID), :) * V(movieID, :)' + p(malesID(maID)) + q(movieID);
         end
+        
+        ## THERE'S A MISTAKE IN THE IMPLEMENTATION OF FAIRNESS.
+        
         fairness_term_romance = 2 * (male_rating - female_rating);
         U_update = 2 * (error) * V(movieID, :) + 2 * lambda1 * U(userID, :); 
         if ismember(userID, malesID(1)) %we do this to know what male ID we use in the update rule of V
-            V_update = 2 * (error) * U(userID, :) + 2 * lambda1 * V(movieID, :) + 2 * lambda2 * fairness_term_romance * (U(userID, :) - U(femalesID(femID),:));
+            V_update = 2 * (error) * U(userID, :) + 2 * lambda1 * V(movieID, :) + 2 * lambda2 * fairness_term_romance * (U(userID, :));
         else
-            V_update = 2 * (error) * U(userID, :) + 2 * lambda1 * V(movieID, :) + 2 * lambda2 * fairness_term_romance * (U(malesID(maID), :) - U(userID,:));
+            V_update = 2 * (error) * U(userID, :) + 2 * lambda1 * V(movieID, :) + 2 * lambda2 * fairness_term_romance * (U(malesID(maID), :));
         end
         p_update = 2 * (error) ;
-        q_update = 2 * (error) ;
+        q_update = 0 ;
     end
 
 
@@ -116,14 +119,14 @@ for i=1:1000000
             male_rating = U(malesID(maID), :) * V(movieID, :)' + p(malesID(maID)) + q(movieID);
         end
         fairness_term_musical = 2 * (male_rating - female_rating);
-        U_update = 2 * (error) * V(movieID, :) + 2 * lambda1 * U(userID, :);
+        U_update = 2 * (error) * V(movieID, :) + 2 * lambda1 * V(movieID, :);
         if ismember(userID, malesID(1))
-            V_update = 2 * (error) * U(userID, :) + 2 * lambda1 * V(movieID, :) + 2 * lambda2 * fairness_term_musical * (U(userID, :) - U(femalesID(femID),:));
+            V_update = 2 * (error) * U(userID, :) + 2 * lambda1 * V(movieID, :) + 2 * lambda2 * fairness_term_musical * (U(userID, :));
         else
-            V_update = 2 * (error) * U(userID, :) + 2 * lambda1 * V(movieID, :) + 2 * lambda2 * fairness_term_musical * (U(malesID(maID), :) - U(userID,:));
+            V_update = 2 * (error) * U(userID, :) + 2 * lambda1 * V(movieID, :) + 2 * lambda2 * fairness_term_musical * (U(malesID(maID), :));
         end
         p_update = 2 * (error) ;
-        q_update = 2 * (error) ;
+        q_update = 0;
     end
 
 
@@ -161,12 +164,12 @@ for i=1:1000000
         fairness_term_action = 2 * (male_rating - female_rating);
         U_update = 2 * (error) * V(movieID, :) + 2 * lambda1 * U(userID, :);
         if ismember(userID, malesID)
-            V_update = 2 * (error) * U(userID, :) + 2 * lambda1 * V(movieID, :) + 2 * lambda2 * fairness_term_action * (U(userID, :)-U(femalesID(femID),:));
+            V_update = 2 * (error) * U(userID, :) + 2 * lambda1 * V(movieID, :) + 2 * lambda2 * fairness_term_action * (U(userID, :));
         else
-            V_update = 2 * (error) * U(userID, :) + 2 * lambda1 * V(movieID, :) + 2 * lambda2 * fairness_term_action * (U(malesID(maID), :) - U(femalesID(femID),:));
+            V_update = 2 * (error) * U(userID, :) + 2 * lambda1 * V(movieID, :) + 2 * lambda2 * fairness_term_action * (U(malesID(maID), :));
         end
         p_update = 2 * (error) ;
-        q_update = 2 * (error) ;
+        q_update = 0 ;
     else
         U_update = 2*(error)*V(movieID,:) + 2*lambda1*U(userID,:);
         V_update = 2*(error)*U(userID,:) + 2*lambda1*V(movieID,:);
