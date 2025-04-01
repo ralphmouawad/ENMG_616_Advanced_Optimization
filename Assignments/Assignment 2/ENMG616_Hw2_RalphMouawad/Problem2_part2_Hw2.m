@@ -32,7 +32,7 @@ x1000 = x;
 e1 = log((norm(x1000 - x_opt1))/norm(x0 - x_opt1));
 e1
 
-% % part b Armijo Rule / Back Tracking
+% % part b Armijo Rule / Back Tracking ## there's a small mistake
 g = @(x) (Q*x + q); % gradient fuction
 f = @(x) (1/2)*x'*Q*x + q'*x; % obj function
 a2 = 0.1;
@@ -101,8 +101,7 @@ x = x0;
 L = max(eig(Q));
 while norm(g(x)) >= 0.001
     d = -inv(Q)*g(x);
-    a5 = 1/L;
-    x = x + a5*d;
+    x = x d;
 end
 x_opt5 = x;
 x_opt5;
